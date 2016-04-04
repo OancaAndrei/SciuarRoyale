@@ -11,6 +11,7 @@ var config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
 // Configuring mysql
 var connection = mysql.createConnection({
   host : config.database_host,
+  port : config.database_port,
   user : config.database_user,
   password : config.database_password,
   database : config.database_name
@@ -20,6 +21,7 @@ connection.connect(function(error) {
     console.error("error connecting to mysql");
     return;
   }
+  console.log("connected to mysql");
 });
 
 // Configuring socket.io
@@ -31,5 +33,5 @@ io.sockets.on("connection", function(socket) {
 // Configuring express
 app.use("/", express.static(__dirname + '/public'));
 server.listen(config.port, "0.0.0.0", function(){
-    console.log("sciuar-royale is running on port", config.port);
+  console.log("sciuar-royale is running on port", config.port);
 });
