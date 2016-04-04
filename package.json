@@ -1,0 +1,29 @@
+{
+  "name": "sciuar-royale",
+  "description": "Sciuar Royale",
+  "version": "0.0.0",
+  "author": "",
+  "contributors": [
+    {
+      "name": "Marco Civettini",
+      "mail": "civettini.marco97@gmail.com",
+      "url": "https://github.com/MarcoCivettini"
+    },
+    {
+      "name": "Andrei Oanca",
+      "mail": "oancaionutandrei@gmail.com",
+      "url": "https://github.com/OancaAndrei"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/OancaAndrei/SciuarRoyale.git"
+  },
+  "homepage": "https://github.com/OancaAndrei/SciuarRoyale#readme",
+  "main": "server",
+  "dependencies": {
+    "express": "^4.13.4",
+    "mysql": "^2.10.2",
+    "socket.io": "^1.4.5"
+  }
+}
