@@ -6,14 +6,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SciuarRoyale</title>
   <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
 </head>
 <body>
-  <h1>Sciuar Royale!</h1>
+  <ul class="pages">
+    <li class="login page">
+      <h3 class="text-center">Clash Royale</h3>
+      <div class="col-md-4">
+      <div class="form">
+        <input type="username" class="usernameInput form-control" maxlength="14" placeholder="Username">
+        <br>
+        <button id="btnLogin" class="btn btn-raised btn-primary ">Login</button>
+      </div>
+      <div>
+    </li>
+
+    <li class="userhome page">
+      <h1>ciao</h1>
+    </li>
+  </ul>
 
   <script src="js/lib/jquery.min.js"></script>
   <script src="js/lib/bootstrap.min.js"></script>
   <script src="/socket.io/socket.io.js"></script>
-  
+
   <script src="js/client.js"></script>
 </body>
 </html>
