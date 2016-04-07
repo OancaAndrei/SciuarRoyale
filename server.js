@@ -35,3 +35,25 @@ app.use("/", express.static(__dirname + '/public'));
 server.listen(config.port, "0.0.0.0", function(){
   console.log("sciuar-royale is running on port", config.port);
 });
+
+io.on('connection', function (socket) {
+  var addedUser = false;
+
+// when the client emits 'add user', this listens and executes
+socket.on('add user', function (username) {
+  socket.username = username;
+  // Sostituire con query che si interfaccia al database
+  if(socket.username == "timur" )
+  {
+  //  usernames[username] = username;
+  //  ++numUsers;
+    addedUser = true;
+    var messaggio = username+" si è collegato";
+    console.log(messaggio);
+  }
+  socket.emit('login', {
+    addedUser: addedUser
+  });
+
+});
+});
