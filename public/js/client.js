@@ -28,14 +28,17 @@ $(function() {
     }
   });
 
-  socket.on('login', function (addedUser) {
-    console.log(addedUser)
-    if(addedUser == false)
+  socket.on('login', function (data) {
+    console.log(data.addedUser);
+    // Se il login è avvenuto con successo
+    if(data.addedUser == true)
     {
-      console.log("ciao")
       $loginPage.fadeOut();
       $userHomePage.fadeIn();
       $loginPage.off('click');
+    }
+    else {
+      alert("Username o password errati");
     }
 
   });
