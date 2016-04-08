@@ -1,27 +1,11 @@
-
-.pages {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  color: white;
-
-}
-
-.page {
-  height: 100%;
-  position: absolute;
-  width: 100%;
-
-}
-
-/* Login Page */
-
-.login.page {
-  background-color: #222;
-}
-
-.userhome.page {
+.userhome {
   display: none;
-  background-color: #708090;
+}
+
+.pageview {
+  padding-top: 70px;
+}
+
+.logout-form {
+  display: none;
 }

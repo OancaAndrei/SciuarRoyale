@@ -8,7 +8,10 @@ $(function() {
   var $inputMessage = $('.inputMessage'); // Input message input box
 
   var $loginPage = $('.login.page'); // The login page
-  var $userHomePage = $('.userhome.page'); // The chatroom page
+  var $userHomePage = $('.userhome'); // The chatroom page
+
+  var loginForm = $('.login-form');
+  var logoutForm = $('.logout-form');
 
   // Prompt for setting a username
   var username;
@@ -24,8 +27,12 @@ $(function() {
     // If the username is valid
     if (username && password) {
       // Tell the server your username
-      socket.emit('add user', {username : username, email: undefined, password : password});
+      socket.emit('add user', {username : username, email: username, password : password});
     }
+  });
+
+  $( "#btnLogout" ).click(function setUsername () {
+    socket.emit('logout');
   });
 
   socket.on('login', function (data) {
@@ -36,11 +43,23 @@ $(function() {
       $loginPage.fadeOut();
       $userHomePage.fadeIn();
       $loginPage.off('click');
+
+      loginForm.hide();
+      logoutForm.show();
+
+      $(".welcome-message").text("Bentornato, " + data.userData.username + "!");
     }
     else {
       alert("Username o password errati");
     }
 
+  });
+
+  socket.on('logout', function() {
+    logoutForm.hide();
+    loginForm.show();
+
+    $(".welcome-message").text("Benvenuto su Sciuar Royale!");
   });
 
 });

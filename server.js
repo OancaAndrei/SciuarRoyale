@@ -16,47 +16,67 @@ var database = Database.connect(
   config.database_password,
   config.database_name
 );
-var UsersOnline = [];
+var UsersOnline = {};
 
 // Configuring socket.io
 io.set('origins', '*:'+config.port);
 io.sockets.on("connection", function(socket) {
   //console.log("client connected");
   var addedUser = false;
-
-
   // when the client emits 'add user', this listens and executes
   socket.on('add user', function (data) {
     var username = data.username, email = data.email, password = data.password;
     database.login(username, email, password, function(status, userData) {
       if (status) {
         // controllo se l'utente è già collegato
-        if( UsersOnline.indexOf(userData.id) == -1){
+        if (UsersOnline[userData.id] === undefined) {
           // login effettuato con successo
-          cosnole.log("loggato")
-          UsersOnline.push(userData.id)
+          console.log("loggato");
+          UsersOnline[userData.id] = userData;
           socket.emit('login', {
             addedUser: true,
             userData: userData
           });
-          socket.username = username;
+          socket.username = userData.username;
+          socket.userId = userData.id;
+          console.log(UsersOnline);
+        } else {
           // se è già connesso
-        }else {
-          console.log("il giocatore", username, "è già collegato")
+          console.log("il giocatore", userData.username, "è già collegato")
           socket.emit('login', {
             addedUser: false
           });
         }
         // se non è riuscito a loggarsi
-      }else {
+      } else {
         // login fallito
         socket.emit('login', {
           addedUser: false
         });
       }
-      console.log("login", username, status);
-      console.log(UsersOnline);
     });
+  });
+  socket.on('logout', function(data) {
+    if (socket.userId !== undefined) {
+      console.log("logout", socket.username);
+      UsersOnline[socket.userId] = undefined;
+      socket.username = undefined;
+      socket.userId = undefined;
+      socket.emit('logout');
+    } else {
+      console.log("client leaving");
+    }
+  });
+  socket.on('disconnect', function() {
+    if (socket.userId !== undefined) {
+      console.log("logout", socket.username);
+      UsersOnline[socket.userId] = undefined;
+      socket.username = undefined;
+      socket.userId = undefined;
+      socket.emit('logout');
+    } else {
+      console.log("client leaving");
+    }
   });
 });
 

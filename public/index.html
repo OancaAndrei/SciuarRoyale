@@ -9,24 +9,55 @@
   <link href="css/style.css" rel="stylesheet">
 </head>
 <body>
-  <ul class="pages">
-    <li class="login page">
-      <h3 class="text-center">Clash Royale</h3>
-      <div class="col-md-4">
-      <div class="form">
-        <input type="username" class="usernameInput form-control" maxlength="50" placeholder="Username">
-        <br>
-        <input type="password" class="passwordInput form-control" maxlength="10" placeholder="Password">
-        <br>
-        <button id="btnLogin" class="btn btn-raised btn-primary ">Login</button>
-      </div>
-      <div>
-    </li>
 
-    <li class="userhome page">
-      <h1>ciao</h1>
-    </li>
-  </ul>
+  <div class="container">
+
+    <div class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Sciuar Royale</a>
+        </div>
+        <center>
+          <div class="navbar-collapse collapse" id="navbar-main">
+            <ul class="nav navbar-nav">
+              <li class="active"><a href="#">Home</a></li>
+              <li><a href="#">About</a></li>
+            </ul>
+            <div class="navbar-form navbar-right" role="search">
+              <div class="login-form">
+                <div class="form-group">
+                  <input type="username" class="form-control usernameInput" name="username" placeholder="Username" maxlength="50">
+                </div>
+                <div class="form-group">
+                  <input type="password" class="form-control passwordInput" name="password" placeholder="Password" maxlength="10">
+                </div>
+                <button id="btnLogin" class="btn btn-default">Sign In</button>
+              </div>
+              <div class="logout-form">
+                <button id="btnLogout" class="btn btn-default">Sign Out</button>
+              </div>
+            </div>
+          </div>
+        </center>
+      </div>
+    </div>
+
+    <div class="pageview">
+      <div class="jumbotron">
+        <h1 class="welcome-message">Benvenuto su Sciuar Royale!</h1>
+      </div>
+
+      <div class="userhome">
+        <h1>Bentornato!</h1>
+      </div>
+    </div>
+
+  </div>
 
   <script src="js/lib/jquery.min.js"></script>
   <script src="js/lib/bootstrap.min.js"></script>
