@@ -33,12 +33,10 @@ io.sockets.on("connection", function(socket) {
           // login effettuato con successo
           console.log("loggato");
           UsersOnline[userData.id] = userData;
-          database.CartePossedute(userData.id, function(status, CarteData) {
           socket.emit('login', {
             addedUser: true,
             userData: userData,
             CarteData: CarteData
-          });
           });
           socket.username = userData.username;
           socket.userId = userData.id;
@@ -81,7 +79,19 @@ io.sockets.on("connection", function(socket) {
       console.log("client leaving");
     }
   });
+
+  socket.on('cartePossedute', function (id){
+    console.log(id);
+    database.CartePossedute(id, function(status, CarteData) {
+      socket.emit('stampaPossedute', {
+        CarteData: CarteData
+      });
+    });
+  });
 });
+
+
+
 
 // Configuring express
 app.use("/", express.static(__dirname + '/public'));

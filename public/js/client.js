@@ -8,7 +8,8 @@ $(function() {
   var $inputMessage = $('.inputMessage'); // Input message input box
 
   var $loginPage = $('.login'); // The login page
-  var $userHomePage = $('.userhome'); // The chatroom page
+  var $userHomePage = $('.userhome');
+  var $creaMazzo = $('.creamazzo');
 
   var loginForm = $('.login-form');
   var logoutForm = $('.logout-form');
@@ -17,6 +18,7 @@ $(function() {
   var username;
   var connected = false;
   var $currentInput = $usernameInput.focus();
+  var id;
 
   var socket = io();
 
@@ -35,12 +37,14 @@ $(function() {
     socket.emit('logout');
   });
 
+
   socket.on('login', function (data) {
     console.log(data.addedUser);
     console.log(data.userData);
     // Se il login è avvenuto con successo
     if(data.addedUser == true)
     {
+      id =data.userData.id
       $loginPage.hide();
       $userHomePage.fadeIn();
     //  $loginPage.off('click');
@@ -54,8 +58,6 @@ $(function() {
       $(".esperienza").text(data.userData.esperienza);
       $(".level").text("Lv: "+data.userData.livello);
       $(".trofei").text(data.userData.trofei);
-      $(".CartePossedute").append("<img src='/img/Carte/"+data.CarteData.idCarta+".png'></img>")
-      console.log(data.CarteData)
     //  $(".welcome-message").text("Bentornato, " + data.userData.username + "!");
     }
     else {
@@ -68,7 +70,21 @@ $(function() {
     logoutForm.hide();
     loginForm.show();
     $userHomePage.hide();
+    $creaMazzo.hide();
     $loginPage.fadeIn();
   });
 
+  $( "#btnCreaMazzo" ).click(function setUsername () {
+    $userHomePage.hide();
+    $creaMazzo.fadeIn();
+    socket.emit('cartePossedute', id);
+  });
+
+  socket.on('stampaPossedute', function (data) {
+    console.log(data)
+      $(".CartePossedute").append("<img src='/img/Carte/"+data.CarteData.idCarta+".png'></img>")
+      console.log(data.CarteData)
+
+
+  });
 });
