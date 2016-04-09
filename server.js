@@ -33,9 +33,12 @@ io.sockets.on("connection", function(socket) {
           // login effettuato con successo
           console.log("loggato");
           UsersOnline[userData.id] = userData;
+          database.CartePossedute(userData.id, function(status, CarteData) {
           socket.emit('login', {
             addedUser: true,
-            userData: userData
+            userData: userData,
+            CarteData: CarteData
+          });
           });
           socket.username = userData.username;
           socket.userId = userData.id;

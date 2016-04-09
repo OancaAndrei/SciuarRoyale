@@ -54,6 +54,8 @@ $(function() {
       $(".esperienza").text(data.userData.esperienza);
       $(".level").text("Lv: "+data.userData.livello);
       $(".trofei").text(data.userData.trofei);
+      $(".CartePossedute").append("<img src='/img/Carte/"+data.CarteData.idCarta+".png'></img>")
+      console.log(data.CarteData)
     //  $(".welcome-message").text("Bentornato, " + data.userData.username + "!");
     }
     else {
