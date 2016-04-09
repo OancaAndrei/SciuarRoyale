@@ -85,6 +85,6 @@ $(function() {
       $(".CartePossedute").append("<img src='/img/Carte/"+data.CarteData.idCarta+".png'></img>")
       console.log(data.CarteData)
 
-
+//prvoa
   });
 });
