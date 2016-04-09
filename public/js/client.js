@@ -7,7 +7,7 @@ $(function() {
   var $messages = $('.messages'); // Messages area
   var $inputMessage = $('.inputMessage'); // Input message input box
 
-  var $loginPage = $('.login.page'); // The login page
+  var $loginPage = $('.login'); // The login page
   var $userHomePage = $('.userhome'); // The chatroom page
 
   var loginForm = $('.login-form');
@@ -37,17 +37,24 @@ $(function() {
 
   socket.on('login', function (data) {
     console.log(data.addedUser);
+    console.log(data.userData);
     // Se il login è avvenuto con successo
     if(data.addedUser == true)
     {
-      $loginPage.fadeOut();
+      $loginPage.hide();
       $userHomePage.fadeIn();
-      $loginPage.off('click');
+    //  $loginPage.off('click');
 
       loginForm.hide();
       logoutForm.show();
 
-      $(".welcome-message").text("Bentornato, " + data.userData.username + "!");
+      //Stampa le cose sulla home page
+      $(".name").text(data.userData.username);
+      $(".money").text(data.userData.monete);
+      $(".esperienza").text(data.userData.esperienza);
+      $(".level").text("Lv: "+data.userData.livello);
+      $(".trofei").text(data.userData.trofei);
+    //  $(".welcome-message").text("Bentornato, " + data.userData.username + "!");
     }
     else {
       alert("Username o password errati");
@@ -58,8 +65,8 @@ $(function() {
   socket.on('logout', function() {
     logoutForm.hide();
     loginForm.show();
-
-    $(".welcome-message").text("Benvenuto su Sciuar Royale!");
+    $userHomePage.hide();
+    $loginPage.fadeIn();
   });
 
 });

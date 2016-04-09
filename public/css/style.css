@@ -1,5 +1,6 @@
 .userhome {
   display: none;
+
 }
 
 .pageview {
@@ -8,4 +9,45 @@
 
 .logout-form {
   display: none;
+
+
+}
+
+.money{
+  background-image: url('/./img/barra-oro.png');
+  margin: 0px;
+background-repeat: no-repeat;
+width: 256px;
+height: 45px;
+line-height: 60px;
+}
+
+.esperienza{
+  background-image: url('/./img/barra-esperienza.png');
+  margin: 0px;
+background-repeat: no-repeat;
+line-height: 57px;
+width: 256px;
+height: 45px;
+
+}
+
+.level{
+  background-image: url('/./img/livello.png');
+  margin: 0px;
+   background-repeat: no-repeat;
+   color: #FFFFFF;
+   line-height: 110px;
+   width: 128px;
+   height: 128px;
+}
+
+.trofei{
+  background-image: url('/./img/trofei.png');
+  margin: 0px;
+   background-repeat: no-repeat;
+
+   line-height: 260px;
+   width: 128px;
+   height: 128px;
 }
