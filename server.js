@@ -5,7 +5,8 @@ var server = require("http").createServer(app);
 var io = require("socket.io").listen(server);
 const crypto = require('crypto');
 
-var Database = require("./lib/database")
+var Database = require("./lib/database");
+var GameServer = require("./lib/game");
 
 var config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
 
@@ -19,11 +20,13 @@ var database = Database.connect(
 );
 var UsersOnline = {};
 
+var game = new GameServer(database);
+
 // Configuring socket.io
 io.set('origins', '*:'+config.port);
 io.sockets.on("connection", function(socket) {
 
-  function loginUser(username, email, password) {
+  function loginUser(username, email, password, callback) {
     var passwordhash = crypto.createHmac('sha256', password).digest('hex');
     database.login(username, email, passwordhash, function(status, userData) {
       if (status) {
@@ -38,10 +41,11 @@ io.sockets.on("connection", function(socket) {
           });
           socket.username = userData.username;
           socket.userId = userData.id;
-          console.log(UsersOnline);
+          // console.log(UsersOnline);
+          if (callback !== undefined) callback(userData);
         } else {
           // se è già connesso
-          console.log("il giocatore", userData.username, "è già collegato")
+          // console.log("il giocatore", userData.username, "è già collegato")
           socket.emit('login', {
             addedUser: false
           });
@@ -78,14 +82,17 @@ io.sockets.on("connection", function(socket) {
 
   socket.on('register user', function (data) {
     var username = data.username, email = data.email, password = data.password;
+    // TODO controllare che la mail inserita sia una mail valida
     database.userExists(username, email, function(exists) {
       if (!exists) {
         // l'utente non esiste, può essere creato
         // Cripto la password
         var passwordhash = crypto.createHmac('sha256', password).digest('hex');
-        database.createUser(username, passwordhash, email, function(status, userData) {
+        database.createUser(username, email, passwordhash, function(status, userData) {
           console.log("Utente registrato: ", username, email);
-          loginUser(username, email, password);
+          loginUser(username, email, password, function(loginData) {
+            game.regalaCarte(loginData.id, 5, 2, 1);
+          });
         });
       } else {
         // l'utente esiste già
@@ -129,9 +136,9 @@ io.sockets.on("connection", function(socket) {
       });
     });
   });
-});
 
-//
+  database.ottieniCarte(function() {});
+});
 
 // Configuring express
 app.use("/", express.static(__dirname + '/public'));
