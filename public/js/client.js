@@ -1,3 +1,6 @@
+var socket = io();
+var cartePossedute = [];
+
 $(function() {
 
   // Initialize varibles
@@ -20,8 +23,6 @@ $(function() {
   var connected = false;
   var $currentInput = $usernameInput.focus();
   var id;
-
-  var socket = io();
 
   // Sets the client's username
   $("#btnLogin").click(function() {
@@ -78,7 +79,7 @@ $(function() {
       $(".trofei").text(data.userData.trofei);
       //  $(".welcome-message").text("Bentornato, " + data.userData.username + "!");
       // Richiedi carte deck primario
-      socket.emit('carteDeckPrimario');
+      socket.emit('carteDeck', {ordine: 0});
     }
     else {
       alert("Username o password errati");
@@ -100,7 +101,9 @@ $(function() {
     $userHomePage.hide();
     $creaMazzo.fadeIn();
     socket.emit('cartePossedute');
-    socket.emit('carteDeckPrimario');
+    socket.emit('carteDeck', {ordine: 0});
+    socket.emit('carteDeck', {ordine: 1});
+    socket.emit('carteDeck', {ordine: 2});
   });
 
   $("#btnMenu").click(function() {
@@ -109,15 +112,17 @@ $(function() {
   });
 
   socket.on('stampaPossedute', function(data) {
+    cartePossedute = data.carteData;
+    console.log("Deck.");
+    console.log(cartePossedute);
     $(".CartePossedute").html("");
     for (var i = 0; i < data.carteData.length; i++) {
-      $(".CartePossedute").append("<img class='carta' src='/img/Carte/" + data.carteData[i].idCarta + ".png'></img>")
+      $(".CartePossedute").append("<img class='carta' src='/img/Carte/" + data.carteData[i].id + ".png'></img>")
     }
   });
 
-  socket.on('carteDeckPrimario', function(data) {
-    console.log("Deck primario.");
-    console.log(data);
+  socket.on('carteDeck', function(data) {
+    if (data.ordine !== 0) return;
     $(".DeckPrimario").html("");
     for (var i = 0; i < data.carteData.length; i++) {
       var carta = data.carteData[i];

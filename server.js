@@ -137,13 +137,14 @@ io.sockets.on("connection", function(socket) {
     });
   });
 
-  socket.on('carteDeckPrimario', function () {
+  socket.on('carteDeck', function (data) {
     if (socket.userId === undefined) {
       console.log("Utente non loggato.");
       return;
     }
-    database.ottieniDeckPrimario(socket.userId, function(status, carteData) {
-      socket.emit('carteDeckPrimario', {
+    database.ottieniDeck(socket.userId, data.ordine, function(status, carteData) {
+      socket.emit('carteDeck', {
+        ordine: data.ordine,
         carteData: carteData
       });
     });
@@ -218,10 +219,10 @@ io.sockets.on("connection", function(socket) {
       console.log("Utente non loggato.");
       return;
     }
-    if (data.ordine === undefined || data.carte === undefined) {
+    if (data.ordine === undefined || data.carte === undefined || data.carte.length !== 8) {
       return;
     }
-    database.ottieniIdDeck(socket.userId, data.ordine, function(status, idDeck) {
+    database.ottieniIdDeck(socket.userId, data.ordine, function(idDeck) {
       database.pulisciDeck(socket.userId, idDeck, function(status) {
         if (status) {
           for (var i = 0; i < data.carte.length; i++) {

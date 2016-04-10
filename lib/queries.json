@@ -5,8 +5,8 @@
 
   "trofeiGiocatore" : "SELECT ((SELECT SUM(trofeiVincitore) FROM tblBattaglie WHERE vincitore = ? AND parita = false) - (SELECT SUM(trofeiSconfitto) FROM tblBattaglie WHERE sconfitto = ?  AND parita = false)) AS trofeiGiocatore",
 
-  "cartePossedute" : "SELECT * FROM tblCartePossedute WHERE idUtente = ?",
-  "carteDeck" : "SELECT carte.nome, costo, conteggioTruppe, tipoCarta, tipoRarita, tipoBersaglio, livello, vita, attacco, durata, velocita FROM tblCarte AS carte JOIN (SELECT * FROM tblDeckFormati JOIN (SELECT id FROM tblDeck AS deck WHERE idUtente = ? AND ordine = ?) AS deckPrimario ON idDeck = deckPrimario.id) AS deck ON carte.id = deck.idCarta JOIN tblCartePossedute AS infoCarte ON (infoCarte.idCarta = carte.id AND infoCarte.idUtente = deck.idUtente)",
+  "cartePossedute" : "SELECT carte.id, carte.nome, costo, conteggioTruppe, tipoCarta, tipoRarita, tipoBersaglio, livello, vita, attacco, durata, velocita FROM tblCarte AS carte JOIN tblCartePossedute AS infoCarte ON (infoCarte.idCarta = carte.id AND infoCarte.idUtente = ?)",
+  "carteDeck" : "SELECT carte.id, carte.nome, costo, conteggioTruppe, tipoCarta, tipoRarita, tipoBersaglio, livello, vita, attacco, durata, velocita FROM tblCarte AS carte JOIN (SELECT * FROM tblDeckFormati JOIN (SELECT id FROM tblDeck AS deck WHERE idUtente = ? AND ordine = ?) AS deckPrimario ON idDeck = deckPrimario.id) AS deck ON carte.id = deck.idCarta JOIN tblCartePossedute AS infoCarte ON (infoCarte.idCarta = carte.id AND infoCarte.idUtente = deck.idUtente)",
   "ottieniIdDeck" : "SELECT id FROM tblDeck WHERE idUtente = ? AND ordine = ?",
 
   "carte" : "SELECT * FROM tblCarte",

@@ -66,3 +66,19 @@
 .carta {
   width: 90px;
 }
+
+.carta.selected {
+  background-color: #82BC65;
+  padding: 6px;
+  border-radius: 10px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+
+.carta.unselected {
+  background-color: #bbb;
+  padding: 6px;
+  border-radius: 10px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
