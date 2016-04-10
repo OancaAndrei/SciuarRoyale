@@ -23,7 +23,7 @@ $(function() {
   var socket = io();
 
   // Sets the client's username
-  $( "#btnLogin" ).click(function setUsername () {
+  $( "#btnLogin" ).click(function() {
     username = $usernameInput.val().trim();
     password = $passwordInput.val();
     // If the username is valid
@@ -33,21 +33,21 @@ $(function() {
     }
   });
 
-  $( "#btnLogout" ).click(function setUsername () {
+  $( "#btnLogout" ).click(function() {
     socket.emit('logout');
   });
 
 
-  socket.on('login', function (data) {
+  socket.on('login', function(data) {
     console.log(data.addedUser);
     console.log(data.userData);
     // Se il login è avvenuto con successo
     if(data.addedUser == true)
     {
-      id =data.userData.id
+      id = data.userData.id
       $loginPage.hide();
       $userHomePage.fadeIn();
-    //  $loginPage.off('click');
+      //  $loginPage.off('click');
 
       loginForm.hide();
       logoutForm.show();
@@ -58,7 +58,7 @@ $(function() {
       $(".esperienza").text(data.userData.esperienza);
       $(".level").text("Lv: "+data.userData.livello);
       $(".trofei").text(data.userData.trofei);
-    //  $(".welcome-message").text("Bentornato, " + data.userData.username + "!");
+      //  $(".welcome-message").text("Bentornato, " + data.userData.username + "!");
     }
     else {
       alert("Username o password errati");
@@ -74,18 +74,29 @@ $(function() {
     $loginPage.fadeIn();
   });
 
-  $( "#btnCreaMazzo" ).click(function setUsername () {
+  $("#btnCreaMazzo").click(function() {
     $userHomePage.hide();
     $creaMazzo.fadeIn();
-    socket.emit('cartePossedute', id);
+    socket.emit('cartePossedute');
+    socket.emit('carteDeckPrimario');
   });
 
-  socket.on('stampaPossedute', function (data) {
-    console.log(data)
-      $(".CartePossedute").append("<img src='/img/Carte/"+data.CarteData.idCarta+".png'></img>")
-      console.log(data.CarteData)
+  socket.on('stampaPossedute', function(data) {
+    for (var i = 0; i < data.carteData.length; i++) {
+      $(".CartePossedute").append("<img src='/img/Carte/" + data.carteData[i].idCarta + ".png'></img>")
+    }
+  });
 
-
+  socket.on('carteDeckPrimario', function(data) {
+    console.log("Deck primario.");
+    console.log(data);
+    for (var i = 0; i < data.carteData.length; i++) {
+      var carta = data.carteData[i];
+      $(".DeckPrimario").append(
+        "<div>" + carta.nome + ": Livello " + carta.livello + ", Vita " + carta.vita
+        + ", Attacco " + carta.attacco + ", Velocità " + carta.velocita + "</div>"
+      );
+    }
   });
 });
 //

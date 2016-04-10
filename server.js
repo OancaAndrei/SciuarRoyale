@@ -35,8 +35,7 @@ io.sockets.on("connection", function(socket) {
           UsersOnline[userData.id] = userData;
           socket.emit('login', {
             addedUser: true,
-            userData: userData,
-            CarteData: CarteData
+            userData: userData
           });
           socket.username = userData.username;
           socket.userId = userData.id;
@@ -80,11 +79,26 @@ io.sockets.on("connection", function(socket) {
     }
   });
 
-  socket.on('cartePossedute', function (id){
-    console.log(id);
-    database.CartePossedute(id, function(status, CarteData) {
+  socket.on('cartePossedute', function () {
+    if (socket.userId === undefined) {
+      console.log("Utente non loggato.");
+      return;
+    }
+    database.ottieniCarteUtente(socket.userId, function(status, carteData) {
       socket.emit('stampaPossedute', {
-        CarteData: CarteData
+        carteData: carteData
+      });
+    });
+  });
+
+  socket.on('carteDeckPrimario', function () {
+    if (socket.userId === undefined) {
+      console.log("Utente non loggato.");
+      return;
+    }
+    database.ottieniDeckPrimario(socket.userId, function(status, carteData) {
+      socket.emit('carteDeckPrimario', {
+        carteData: carteData
       });
     });
   });
