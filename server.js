@@ -3,6 +3,7 @@ var express = require("express");
 var app = express();
 var server = require("http").createServer(app);
 var io = require("socket.io").listen(server);
+const crypto = require('crypto');
 
 var Database = require("./lib/database")
 
@@ -23,7 +24,8 @@ io.set('origins', '*:'+config.port);
 io.sockets.on("connection", function(socket) {
 
   function loginUser(username, email, password) {
-    database.login(username, email, password, function(status, userData) {
+    var passwordhash = crypto.createHmac('sha256', password).digest('hex');
+    database.login(username, email, passwordhash, function(status, userData) {
       if (status) {
         // controllo se l'utente è già collegato
         if (UsersOnline[userData.id] === undefined) {
@@ -79,7 +81,9 @@ io.sockets.on("connection", function(socket) {
     database.userExists(username, email, function(exists) {
       if (!exists) {
         // l'utente non esiste, può essere creato
-        database.createUser(username, email, password, function(status, userData) {
+        // Cripto la password
+        var passwordhash = crypto.createHmac('sha256', password).digest('hex');
+        database.createUser(username, passwordhash, email, function(status, userData) {
           console.log("Utente registrato: ", username, email);
           loginUser(username, email, password);
         });
