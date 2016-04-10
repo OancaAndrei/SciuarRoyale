@@ -18,41 +18,45 @@
 
 }
 
-.money{
+.money {
   background-image: url('/./img/barra-oro.png');
   margin: 0px;
-background-repeat: no-repeat;
-width: 256px;
-height: 45px;
-line-height: 60px;
+  background-repeat: no-repeat;
+  width: 256px;
+  height: 45px;
+  line-height: 60px;
 }
 
-.esperienza{
+.esperienza {
   background-image: url('/./img/barra-esperienza.png');
   margin: 0px;
-background-repeat: no-repeat;
-line-height: 57px;
-width: 256px;
-height: 45px;
+  background-repeat: no-repeat;
+  line-height: 57px;
+  width: 256px;
+  height: 45px;
 
 }
 
-.level{
+.level {
   background-image: url('/./img/livello.png');
   margin: 0px;
-   background-repeat: no-repeat;
-   color: #FFFFFF;
-   line-height: 110px;
-   width: 128px;
-   height: 128px;
+  background-repeat: no-repeat;
+  color: #FFFFFF;
+  line-height: 110px;
+  width: 128px;
+  height: 128px;
 }
 
-.trofei{
+.trofei {
   background-image: url('/./img/trofei.png');
   margin: 0px;
-   background-repeat: no-repeat;
+  background-repeat: no-repeat;
 
-   line-height: 260px;
-   width: 128px;
-   height: 128px;
+  line-height: 260px;
+  width: 128px;
+  height: 128px;
+}
+
+.carta {
+  width: 90px;
 }

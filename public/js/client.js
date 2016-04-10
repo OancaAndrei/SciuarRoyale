@@ -59,6 +59,8 @@ $(function() {
       $(".level").text("Lv: "+data.userData.livello);
       $(".trofei").text(data.userData.trofei);
       //  $(".welcome-message").text("Bentornato, " + data.userData.username + "!");
+      // Richiedi carte deck primario
+      socket.emit('carteDeckPrimario');
     }
     else {
       alert("Username o password errati");
@@ -81,19 +83,26 @@ $(function() {
     socket.emit('carteDeckPrimario');
   });
 
+  $("#btnMenu").click(function() {
+    $creaMazzo.hide();
+    $userHomePage.fadeIn();
+  });
+
   socket.on('stampaPossedute', function(data) {
+    $(".CartePossedute").html("");
     for (var i = 0; i < data.carteData.length; i++) {
-      $(".CartePossedute").append("<img src='/img/Carte/" + data.carteData[i].idCarta + ".png'></img>")
+      $(".CartePossedute").append("<img class='carta' src='/img/Carte/" + data.carteData[i].idCarta + ".png'></img>")
     }
   });
 
   socket.on('carteDeckPrimario', function(data) {
     console.log("Deck primario.");
     console.log(data);
+    $(".DeckPrimario").html("");
     for (var i = 0; i < data.carteData.length; i++) {
       var carta = data.carteData[i];
       $(".DeckPrimario").append(
-        "<div>" + carta.nome + ": Livello " + carta.livello + ", Vita " + carta.vita
+        "<div><b>" + carta.nome + "</b>: Livello " + carta.livello + ", Vita " + carta.vita
         + ", Attacco " + carta.attacco + ", Velocità " + carta.velocita + "</div>"
       );
     }
