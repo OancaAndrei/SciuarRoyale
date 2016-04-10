@@ -10,6 +10,7 @@ $(function() {
   var $loginPage = $('.login'); // The login page
   var $userHomePage = $('.userhome');
   var $creaMazzo = $('.creamazzo');
+  var $Battaglia = $('.battaglia');
 
   var loginForm = $('.login-form');
   var logoutForm = $('.logout-form');
@@ -90,6 +91,7 @@ $(function() {
     loginForm.show();
     $userHomePage.hide();
     $creaMazzo.hide();
+    $Battaglia.hide();
     $loginPage.fadeIn();
     $("#registerUser").fadeIn();
   });
@@ -125,5 +127,22 @@ $(function() {
       );
     }
   });
+  $("#btnBattaglia").click(function() {
+    $userHomePage.hide();
+    $Battaglia.fadeIn();
+    socket.emit('stanzaAttesa');
+  });
+
+/*
+  socket.on('Partita', function(data) {
+  });
+*/
+  $("#btnAnnulla").click(function() {
+    $userHomePage.fadeIn();
+    $Battaglia.hide();
+    socket.emit('EsciStanzaAttesa');
+  //  socket.emit('carteDeckPrimario');
+  });
+
 });
 //

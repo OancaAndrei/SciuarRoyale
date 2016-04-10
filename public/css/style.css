@@ -19,6 +19,10 @@
 .register {
   display: none;
 }
+.battaglia {
+  display: none;
+
+}
 
 .money {
   background-image: url('/./img/barra-oro.png');

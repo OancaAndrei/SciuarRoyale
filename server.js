@@ -19,6 +19,7 @@ var database = Database.connect(
   config.database_name
 );
 var UsersOnline = {};
+var StanzaAttesa = [];
 
 var game = new GameServer(database);
 
@@ -41,6 +42,7 @@ io.sockets.on("connection", function(socket) {
           });
           socket.username = userData.username;
           socket.userId = userData.id;
+          socket.trofei = userData.trofei;
           // console.log(UsersOnline);
           if (callback !== undefined) callback(userData);
         } else {
@@ -68,8 +70,13 @@ io.sockets.on("connection", function(socket) {
     loginUser(username, email, password);
   });
 
-  socket.on('logout', function(data) {
+  socket.on('logout', function() {
+    // se si strova nella stanza di attesa lo elimino
     if (socket.userId !== undefined) {
+      var index = StanzaAttesa.indexOf(socket.userId);
+      if (index > -1) {
+      StanzaAttesa.splice(index, 1);
+      }
       console.log("logout", socket.username);
       UsersOnline[socket.userId] = undefined;
       socket.username = undefined;
@@ -103,6 +110,11 @@ io.sockets.on("connection", function(socket) {
 
   socket.on('disconnect', function() {
     if (socket.userId !== undefined) {
+      // se si strova nella stanza di attesa lo elimino
+      var index = StanzaAttesa.indexOf(socket.userId);
+      if (index > -1) {
+      StanzaAttesa.splice(index, 1);
+      }
       console.log("logout", socket.username);
       UsersOnline[socket.userId] = undefined;
       socket.username = undefined;
@@ -136,6 +148,70 @@ io.sockets.on("connection", function(socket) {
       });
     });
   });
+
+  socket.on('stanzaAttesa', function () {
+    StanzaAttesa.push(socket.userId)
+    console.log(socket.trofei)
+    var trofeiMin = socket.trofei -100
+    if(trofeiMin < 0){trofeiMin = 0}
+    var trofeiMax = socket.trofei +100
+    database.cercaAvversario(trofeiMin,trofeiMax, function(status, possibiliAvversari) {
+      for(var y = 0; y<StanzaAttesa.length;y++)
+      {
+        for(var i = 0; i<possibiliAvversari.length; i++)
+        {
+          // se trovo i giocatori
+          if((possibiliAvversari[i].id == StanzaAttesa[y]) && (socket.userId != StanzaAttesa[y])){
+            var idAvversario = StanzaAttesa[y];
+            console.log("Ora inizia lo scontro tra "+socket.userId+" e "+ idAvversario)
+            // elimino i due giocatori dalla sala d'attesa
+            var index = StanzaAttesa.indexOf(socket.userId);
+            if (index > -1) {
+            StanzaAttesa.splice(index, 1);
+            }
+            var index = StanzaAttesa.indexOf(StanzaAttesa[y]);
+            if (index > -1) {
+            StanzaAttesa.splice(index, 1);
+            }
+            var partita = SvoglimentoPartita(socket.userId,idAvversario);
+            database.esitoBattaglia(partita.vincitore,partita.sconfitto,partita.trofeiVincitore,partita.trofeiSconfitto, function(status) {});
+            database.inserisciTrofei(partita.trofeiVincitore,partita.vincitore, function(status) {});
+            database.inserisciTrofei(partita.trofeiSconfitto,partita.sconfitto, function(status) {});
+            console.log(partita)
+            socket.emit('Partita', {
+
+            });
+          }
+        }
+      }
+    });
+  });
+
+  socket.on('EsciStanzaAttesa', function () {
+    var index = StanzaAttesa.indexOf(socket.userId);
+    if (index > -1) {
+    StanzaAttesa.splice(index, 1);
+    }
+  });
+
+function SvoglimentoPartita(id,idAvversario){
+  var partita ={}
+  var casuale = Math.floor((Math.random() * 2) + 1);
+  var trofei = Math.floor((Math.random() * 10) + 20);
+  partita.trofeiVincitore = trofei;
+  partita.trofeiSconfitto = 0-trofei;
+  if(casuale == 1)
+  {
+    partita.vincitore = id
+    partita.sconfitto = idAvversario
+  }
+  if(casuale == 2)
+  {
+    partita.vincitore = idAvversario
+    partita.sconfitto = id
+  }
+  return partita
+}
 
   database.ottieniCarte(function() {});
 });

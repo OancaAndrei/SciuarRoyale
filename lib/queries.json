@@ -9,5 +9,8 @@
   "carteDeck" : "SELECT carte.nome, costo, conteggioTruppe, tipoCarta, tipoRarita, tipoBersaglio, livello, vita, attacco, durata, velocita FROM tblCarte AS carte JOIN (SELECT * FROM tblDeckFormati JOIN (SELECT id FROM tblDeck AS deck WHERE idUtente = ? AND ordine = ?) AS deckPrimario ON idDeck = deckPrimario.id) AS deck ON carte.id = deck.idCarta JOIN tblCartePossedute AS infoCarte ON (infoCarte.idCarta = carte.id AND infoCarte.idUtente = deck.idUtente)",
 
   "carte" : "SELECT * FROM tblCarte",
-  "aggiungiCartaAGiocatore" : "INSERT INTO tblCartePossedute (idCarta, idUtente, dataOttenimento, livello, quantita) VALUES (?, ?, NOW(), '1', '1')"
+  "aggiungiCartaAGiocatore" : "INSERT INTO tblCartePossedute (idCarta, idUtente, dataOttenimento, livello, quantita) VALUES (?, ?, NOW(), '1', '1')",
+  "cercaAvversario" : "SELECT id,username FROM `tblUtenti` WHERE trofei >= '?' AND trofei <= '?'",
+  "esitoBattaglia": "INSERT INTO tblBattaglie (vincitore, sconfitto, trofeiVincitore, trofeiSconfitto) VALUES (?,?,?,?)",
+  "inserisciTrofei": "UPDATE `tblUtenti` SET `trofei` = ? WHERE `tblUtenti`.`id` = ?"
 }
