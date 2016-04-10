@@ -21,11 +21,8 @@ var UsersOnline = {};
 // Configuring socket.io
 io.set('origins', '*:'+config.port);
 io.sockets.on("connection", function(socket) {
-  //console.log("client connected");
-  var addedUser = false;
-  // when the client emits 'add user', this listens and executes
-  socket.on('add user', function (data) {
-    var username = data.username, email = data.email, password = data.password;
+
+  function loginUser(username, email, password) {
     database.login(username, email, password, function(status, userData) {
       if (status) {
         // controllo se l'utente è già collegato
@@ -55,7 +52,16 @@ io.sockets.on("connection", function(socket) {
         });
       }
     });
+  }
+
+  //console.log("client connected");
+  var addedUser = false;
+  // when the client emits 'add user', this listens and executes
+  socket.on('add user', function (data) {
+    var username = data.username, email = data.email, password = data.password;
+    loginUser(username, email, password);
   });
+
   socket.on('logout', function(data) {
     if (socket.userId !== undefined) {
       console.log("logout", socket.username);
@@ -67,6 +73,23 @@ io.sockets.on("connection", function(socket) {
       console.log("client leaving");
     }
   });
+
+  socket.on('register user', function (data) {
+    var username = data.username, email = data.email, password = data.password;
+    database.userExists(username, email, function(exists) {
+      if (!exists) {
+        // l'utente non esiste, può essere creato
+        database.createUser(username, email, password, function(status, userData) {
+          console.log("Utente registrato: ", username, email);
+          loginUser(username, email, password);
+        });
+      } else {
+        // l'utente esiste già
+        console.log("Impossibile registrare l'utente:", username, email);
+      }
+    });
+  });
+
   socket.on('disconnect', function() {
     if (socket.userId !== undefined) {
       console.log("logout", socket.username);

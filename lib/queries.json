@@ -1,5 +1,8 @@
 {
   "login": "SELECT * FROM tblUtenti WHERE (username = ? OR email = ?) AND password = ?",
+  "userExists" : "SELECT * FROM tblUtenti WHERE (username = ? OR email = ?)",
+  "createUser" : "INSERT INTO tblUtenti (username, password, email) VALUES (?, ?, ?)", 
+
   "cartePossedute": "SELECT * FROM tblCartePossedute WHERE idUtente = ?",
   "carteDeck": "SELECT carte.nome, costo, conteggioTruppe, tipoCarta, tipoRarita, tipoBersaglio, livello, vita, attacco, durata, velocita FROM tblCarte AS carte JOIN (SELECT * FROM tblDeckFormati JOIN (SELECT id FROM tblDeck AS deck WHERE idUtente = ? AND ordine = ?) AS deckPrimario ON idDeck = deckPrimario.id) AS deck ON carte.id = deck.idCarta JOIN tblCartePossedute AS infoCarte ON (infoCarte.idCarta = carte.id AND infoCarte.idUtente = deck.idUtente)"
 }

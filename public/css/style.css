@@ -14,8 +14,10 @@
 
 .logout-form {
   display: none;
+}
 
-
+.register {
+  display: none;
 }
 
 .money {

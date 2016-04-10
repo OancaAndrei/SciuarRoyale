@@ -26,7 +26,8 @@
           <div class="navbar-collapse collapse" id="navbar-main">
             <ul class="nav navbar-nav">
               <li class="active"><a href="#">Home</a></li>
-              <li><a href="#">About</a></li>
+              <li><a href="#">Info</a></li>
+              <li><a id="registerUser" href="#">Registrati</a></li>
             </ul>
             <div class="navbar-form navbar-right" role="search">
               <div class="login-form">
@@ -36,10 +37,10 @@
                 <div class="form-group">
                   <input type="password" class="form-control passwordInput" name="password" placeholder="Password" maxlength="10">
                 </div>
-                <button id="btnLogin" class="btn btn-default">Sign In</button>
+                <button id="btnLogin" class="btn btn-default">Entra</button>
               </div>
               <div class="logout-form">
-                <button id="btnLogout" class="btn btn-default">Sign Out</button>
+                <button id="btnLogout" class="btn btn-default">Esci</button>
               </div>
             </div>
           </div>
@@ -51,6 +52,24 @@
       <div class="login">
         <h1 class="text-center">Benvenuto su Sciuar Royale!</h1>
       </div>
+      <div class="register">
+        <h1 class="text-center">Registrati su Sciuar Royale!</h1>
+        <div class="login-form">
+          <div class="form-group">
+            <input type="username" class="form-control usernameInputRegister" name="username" placeholder="Username" maxlength="50">
+          </div>
+          <div class="form-group">
+            <input type="email" class="form-control emailInputRegister" name="email" placeholder="Email" maxlength="50">
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control password1InputRegister" name="password" placeholder="Password" maxlength="10">
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control password2InputRegister" name="password" placeholder="Ripeti password" maxlength="10">
+          </div>
+          <button id="btnRegister" class="btn btn-default">Registrati</button>
+        </div>
+      </div>
       <div class="userhome">
         <div class="col-md-4">
           <h2 class="name">undefined</h2>
@@ -59,7 +78,7 @@
           <h3 class="level text-center">0</h3>
           <h3 class="trofei text-center">0</h3>
         </div>
-        <div class="col-md-4">
+        <div class="col-sm-12 col-md-8">
           <h2>Il tuo mazzo</h2>
           <div class="DeckPrimario">
           </div>

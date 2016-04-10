@@ -23,7 +23,7 @@ $(function() {
   var socket = io();
 
   // Sets the client's username
-  $( "#btnLogin" ).click(function() {
+  $("#btnLogin").click(function() {
     username = $usernameInput.val().trim();
     password = $passwordInput.val();
     // If the username is valid
@@ -33,10 +33,25 @@ $(function() {
     }
   });
 
-  $( "#btnLogout" ).click(function() {
+  $("#btnLogout").click(function() {
     socket.emit('logout');
   });
 
+  $("#registerUser").click(function() {
+    $(".login").hide();
+    $(".register").fadeIn();
+  });
+
+  $("#btnRegister").click(function() {
+    username = $(".usernameInputRegister").val().trim();
+    email = $(".emailInputRegister").val().trim();
+    password1 = $(".password1InputRegister").val().trim();
+    password2 = $(".password2InputRegister").val().trim();
+    console.log(username, email, password1, password2);
+    if (username && email && password1 && (password1 === password2)) {
+      socket.emit('register user', {username : username, email: email, password : password1});
+    }
+  });
 
   socket.on('login', function(data) {
     console.log(data.addedUser);
@@ -49,6 +64,8 @@ $(function() {
       $userHomePage.fadeIn();
       //  $loginPage.off('click');
 
+      $("#registerUser").hide();
+      $(".register").hide();
       loginForm.hide();
       logoutForm.show();
 
@@ -74,6 +91,7 @@ $(function() {
     $userHomePage.hide();
     $creaMazzo.hide();
     $loginPage.fadeIn();
+    $("#registerUser").fadeIn();
   });
 
   $("#btnCreaMazzo").click(function() {
