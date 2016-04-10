@@ -75,7 +75,7 @@ io.sockets.on("connection", function(socket) {
     if (socket.userId !== undefined) {
       var index = StanzaAttesa.indexOf(socket.userId);
       if (index > -1) {
-      StanzaAttesa.splice(index, 1);
+        StanzaAttesa.splice(index, 1);
       }
       console.log("logout", socket.username);
       UsersOnline[socket.userId] = undefined;
@@ -98,7 +98,7 @@ io.sockets.on("connection", function(socket) {
         database.createUser(username, email, passwordhash, function(status, userData) {
           console.log("Utente registrato: ", username, email);
           loginUser(username, email, password, function(loginData) {
-            game.regalaCarte(loginData.id, 5, 2, 1);
+            game.creaUtente(loginData.id);
           });
         });
       } else {
@@ -113,7 +113,7 @@ io.sockets.on("connection", function(socket) {
       // se si strova nella stanza di attesa lo elimino
       var index = StanzaAttesa.indexOf(socket.userId);
       if (index > -1) {
-      StanzaAttesa.splice(index, 1);
+        StanzaAttesa.splice(index, 1);
       }
       console.log("logout", socket.username);
       UsersOnline[socket.userId] = undefined;
@@ -167,11 +167,11 @@ io.sockets.on("connection", function(socket) {
             // elimino i due giocatori dalla sala d'attesa
             var index = StanzaAttesa.indexOf(socket.userId);
             if (index > -1) {
-            StanzaAttesa.splice(index, 1);
+              StanzaAttesa.splice(index, 1);
             }
             var index = StanzaAttesa.indexOf(StanzaAttesa[y]);
             if (index > -1) {
-            StanzaAttesa.splice(index, 1);
+              StanzaAttesa.splice(index, 1);
             }
             var partita = SvoglimentoPartita(socket.userId,idAvversario);
             database.esitoBattaglia(partita.vincitore,partita.sconfitto,partita.trofeiVincitore,partita.trofeiSconfitto, function(status) {});
@@ -190,28 +190,49 @@ io.sockets.on("connection", function(socket) {
   socket.on('EsciStanzaAttesa', function () {
     var index = StanzaAttesa.indexOf(socket.userId);
     if (index > -1) {
-    StanzaAttesa.splice(index, 1);
+      StanzaAttesa.splice(index, 1);
     }
   });
 
-function SvoglimentoPartita(id,idAvversario){
-  var partita ={}
-  var casuale = Math.floor((Math.random() * 2) + 1);
-  var trofei = Math.floor((Math.random() * 10) + 20);
-  partita.trofeiVincitore = trofei;
-  partita.trofeiSconfitto = 0-trofei;
-  if(casuale == 1)
-  {
-    partita.vincitore = id
-    partita.sconfitto = idAvversario
+  function SvoglimentoPartita(id,idAvversario){
+    var partita ={}
+    var casuale = Math.floor((Math.random() * 2) + 1);
+    var trofei = Math.floor((Math.random() * 10) + 20);
+    partita.trofeiVincitore = trofei;
+    partita.trofeiSconfitto = 0-trofei;
+    if(casuale == 1)
+    {
+      partita.vincitore = id
+      partita.sconfitto = idAvversario
+    }
+    if(casuale == 2)
+    {
+      partita.vincitore = idAvversario
+      partita.sconfitto = id
+    }
+    return partita
   }
-  if(casuale == 2)
-  {
-    partita.vincitore = idAvversario
-    partita.sconfitto = id
-  }
-  return partita
-}
+
+  socket.on('impostaCarteDeck', function (data) {
+    if (socket.userId === undefined) {
+      console.log("Utente non loggato.");
+      return;
+    }
+    if (data.ordine === undefined || data.carte === undefined) {
+      return;
+    }
+    database.ottieniIdDeck(socket.userId, data.ordine, function(status, idDeck) {
+      database.pulisciDeck(socket.userId, idDeck, function(status) {
+        if (status) {
+          for (var i = 0; i < data.carte.length; i++) {
+            database.aggiungiCartaADeck(socket.userId, data.carte[i], idDeck);
+          }
+        } else {
+          console.log("errore nel pulire il deck");
+        }
+      });
+    });
+  });
 
   database.ottieniCarte(function() {});
 });
