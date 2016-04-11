@@ -12,8 +12,9 @@
   "carte" : "SELECT * FROM tblCarte",
   "aggiungiCartaAGiocatore" : "INSERT INTO tblCartePossedute (idCarta, idUtente, dataOttenimento, livello, quantita) VALUES (?, ?, NOW(), '1', '1')",
 
-  "cercaAvversario" : "SELECT id,username,trofei FROM `tblUtenti` WHERE trofei >= '?' AND trofei <= '?'",
-  "esitoBattaglia": "INSERT INTO tblBattaglie (vincitore, sconfitto, trofeiVincitore, trofeiSconfitto) VALUES (?,?,?,?)",
+  "cercaAvversario" : "SELECT id, username, trofei FROM tblUtenti WHERE trofei >= '?' AND trofei <= '?'",
+  "esitoBattaglia": "INSERT INTO tblBattaglie (vincitore, sconfitto, trofeiVincitore, trofeiSconfitto, dataInizio, dataFine) VALUES (?, ?, ?, ?, NOW(), NOW())",
+
   "inserisciTrofei": "UPDATE `tblUtenti` SET `trofei` = ? WHERE `tblUtenti`.`id` = ?",
 
   "creaDeck" : "INSERT INTO tblDeck (idUtente, ordine) VALUES (?, ?)",
