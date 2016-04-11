@@ -248,8 +248,6 @@ io.sockets.on("connection", function(socket) {
       });
     });
   });
-
-  database.ottieniCarte(function() {});
 });
 
 // Configuring express
