@@ -8,6 +8,11 @@
 
 }
 
+.risultati {
+  display: none;
+
+}
+
 .pageview {
   padding-top: 70px;
 }
@@ -81,4 +86,10 @@
   border-radius: 10px;
   margin-right: 5px;
   margin-bottom: 5px;
+}
+.vincitore{
+  color: green;
+}
+.sconfitto{
+  color: red;
 }

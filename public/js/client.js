@@ -14,6 +14,7 @@ $(function() {
   var $userHomePage = $('.userhome');
   var $creaMazzo = $('.creamazzo');
   var $Battaglia = $('.battaglia');
+  var $risultati = $('.risultati');
 
   var loginForm = $('.login-form');
   var logoutForm = $('.logout-form');
@@ -23,6 +24,7 @@ $(function() {
   var connected = false;
   var $currentInput = $usernameInput.focus();
   var id;
+  var UserData = {}
 
   // Sets the client's username
   $("#btnLogin").click(function() {
@@ -61,6 +63,7 @@ $(function() {
     // Se il login è avvenuto con successo
     if(data.addedUser == true)
     {
+      userData = data.userData;
       id = data.userData.id
       $loginPage.hide();
       $userHomePage.fadeIn();
@@ -93,6 +96,7 @@ $(function() {
     $userHomePage.hide();
     $creaMazzo.hide();
     $Battaglia.hide();
+    $partita.hide();
     $loginPage.fadeIn();
     $("#registerUser").fadeIn();
   });
@@ -138,14 +142,55 @@ $(function() {
     socket.emit('stanzaAttesa');
   });
 
-/*
+
   socket.on('Partita', function(data) {
+    console.log(data.partita);
+    $Battaglia.hide();
+    $risultati.fadeIn();
+    $(".nomeVincitore").text(data.partita.usernameVincitore);
+    $(".nomeSconfitto").text(data.partita.usernameSconfitto);
+    $(".trofeiVincitore").text("+ "+data.partita.trofei);
+    $(".trofeiSconfitto").text("- "+data.partita.trofei);
+    $(".trofeiTotaliVincitore").text(data.partita.trofeiVincitore);
+    $(".trofeiTotaliSconfitto").text(data.partita.trofeiSconfitto);
+    if(data.partita.vincitore == id) userData.trofei = data.partita.trofeiVincitore
+    if(data.partita.sconfitto == id) userData.trofei = data.partita.trofeiSconfitto
+
   });
-*/
+
+  socket.on('PartitaAvversario', function(data) {
+    console.log(id)
+    console.log(data.partita.sconfitto)
+    if( (id == data.partita.sconfitto) || (id == data.partita.vincitore))
+    {
+    $Battaglia.hide();
+    $risultati.fadeIn();
+    $(".nomeVincitore").text(data.partita.usernameVincitore);
+    $(".nomeSconfitto").text(data.partita.usernameSconfitto);
+    $(".trofeiVincitore").text("+ "+data.partita.trofei);
+    $(".trofeiSconfitto").text("- "+data.partita.trofei);
+    $(".trofeiTotaliVincitore").text(data.partita.trofeiVincitore);
+    $(".trofeiTotaliSconfitto").text(data.partita.trofeiSconfitto);
+    if(data.partita.vincitore == id) userData.trofei = data.partita.trofeiVincitore
+    if(data.partita.sconfitto == id) userData.trofei = data.partita.trofeiSconfitto
+    }
+  });
+
   $("#btnAnnulla").click(function() {
     $userHomePage.fadeIn();
     $Battaglia.hide();
     socket.emit('EsciStanzaAttesa');
+  //  socket.emit('carteDeckPrimario');
+  });
+
+  $("#btnok").click(function() {
+    $risultati.hide();
+    $userHomePage.fadeIn();
+    //Stampa le cose sulla home page
+    console.log("ciao")
+    console.log(userData)
+    $(".trofei").text(userData.trofei);
+    //socket.emit('EsciStanzaAttesa');
   //  socket.emit('carteDeckPrimario');
   });
 

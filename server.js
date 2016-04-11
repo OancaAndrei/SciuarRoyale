@@ -163,24 +163,30 @@ io.sockets.on("connection", function(socket) {
         {
           // se trovo i giocatori
           if((possibiliAvversari[i].id == StanzaAttesa[y]) && (socket.userId != StanzaAttesa[y])){
-            var idAvversario = StanzaAttesa[y];
-            console.log("Ora inizia lo scontro tra "+socket.userId+" e "+ idAvversario)
+            var Avversario = {}
+            Avversario.id = possibiliAvversari[i].id
+            Avversario.username = possibiliAvversari[i].username;
+            Avversario.trofei =possibiliAvversari[i].trofei;
+            console.log("Ora inizia lo scontro tra "+socket.userId+" e "+ Avversario.id)
             // elimino i due giocatori dalla sala d'attesa
             var index = StanzaAttesa.indexOf(socket.userId);
             if (index > -1) {
               StanzaAttesa.splice(index, 1);
             }
-            var index = StanzaAttesa.indexOf(StanzaAttesa[y]);
+            var index = StanzaAttesa.indexOf(Avversario.id);
             if (index > -1) {
               StanzaAttesa.splice(index, 1);
             }
-            var partita = SvoglimentoPartita(socket.userId,idAvversario);
+            var partita = SvoglimentoPartita(Avversario);
             database.esitoBattaglia(partita.vincitore,partita.sconfitto,partita.trofeiVincitore,partita.trofeiSconfitto, function(status) {});
             database.inserisciTrofei(partita.trofeiVincitore,partita.vincitore, function(status) {});
             database.inserisciTrofei(partita.trofeiSconfitto,partita.sconfitto, function(status) {});
             console.log(partita)
             socket.emit('Partita', {
-
+                partita:partita
+            });
+            socket.broadcast.emit('PartitaAvversario', {
+                partita:partita
             });
           }
         }
@@ -195,21 +201,29 @@ io.sockets.on("connection", function(socket) {
     }
   });
 
-  function SvoglimentoPartita(id,idAvversario){
+  function SvoglimentoPartita(Avversario){
+    console.log(Avversario)
     var partita ={}
     var casuale = Math.floor((Math.random() * 2) + 1);
     var trofei = Math.floor((Math.random() * 10) + 20);
-    partita.trofeiVincitore = trofei;
-    partita.trofeiSconfitto = 0-trofei;
+    partita.trofei = trofei;
     if(casuale == 1)
     {
-      partita.vincitore = id
-      partita.sconfitto = idAvversario
+      partita.usernameVincitore = socket.username
+      partita.vincitore = socket.userId
+      partita.trofeiVincitore = socket.trofei+trofei;
+      partita.sconfitto = Avversario.id
+      partita.usernameSconfitto = Avversario.username;
+      partita.trofeiSconfitto = Avversario.trofei-trofei;
     }
     if(casuale == 2)
     {
-      partita.vincitore = idAvversario
-      partita.sconfitto = id
+      partita.vincitore = Avversario.id
+      partita.usernameVincitore = Avversario.username;
+      partita.sconfitto = socket.userId
+      partita.trofeiSconfitto = socket.trofei-trofei;
+      partita.usernameSconfitto = socket.username
+      partita.trofeiVincitore = Avversario.trofei+trofei;
     }
     return partita
   }
