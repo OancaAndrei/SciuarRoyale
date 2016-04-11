@@ -92,12 +92,13 @@ $(function() {
 
   socket.on('logout', function() {
     logoutForm.hide();
-    loginForm.show();
+    loginForm.fadeIn();
     $userHomePage.hide();
     $creaMazzo.hide();
     $Battaglia.hide();
-    $partita.hide();
+    $risultati.hide();
     $loginPage.fadeIn();
+    $risultati.hide();
     $("#registerUser").fadeIn();
   });
 
