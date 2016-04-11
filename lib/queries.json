@@ -12,7 +12,7 @@
   "carte" : "SELECT * FROM tblCarte",
   "aggiungiCartaAGiocatore" : "INSERT INTO tblCartePossedute (idCarta, idUtente, dataOttenimento, livello, quantita) VALUES (?, ?, NOW(), '1', '1')",
 
-  "cercaAvversario" : "SELECT id,username FROM `tblUtenti` WHERE trofei >= '?' AND trofei <= '?'",
+  "cercaAvversario" : "SELECT id,username,trofei FROM `tblUtenti` WHERE trofei >= '?' AND trofei <= '?'",
   "esitoBattaglia": "INSERT INTO tblBattaglie (vincitore, sconfitto, trofeiVincitore, trofeiSconfitto) VALUES (?,?,?,?)",
   "inserisciTrofei": "UPDATE `tblUtenti` SET `trofei` = ? WHERE `tblUtenti`.`id` = ?",
 
